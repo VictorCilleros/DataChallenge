@@ -88,9 +88,9 @@ def French_Preprocess_listofSentence(listofSentence):
         sentence_w_punct = "".join([i.lower() for i in sentence if i not in string.punctuation])
         sentence_w_num = ''.join(i for i in sentence_w_punct if not i.isdigit())
         tokenize_sentence = nltk.tokenize.word_tokenize(sentence_w_num)
-        words_w_stopwords = [i for i in tokenize_sentence if i not in french_stopwords]
-        words_lemmatize = (lemmatizer.lemmatize(w) for w in words_w_stopwords)
-        sentence_clean = ' '.join(w for w in words_lemmatize if w.lower() in mots or not w.isalpha())
+        words_w_stopwords = [i for i in tokenize_sentence if i not in self.french_stopwords]
+        words_lemmatize = (self.lemmatizer.lemmatize(w) for w in words_w_stopwords)
+        sentence_clean = ' '.join(w for w in words_lemmatize if w.lower() in self.mots or not w.isalpha())
         preprocess_list.append(sentence_clean)
 
     df_test = pd.DataFrame(preprocess_list,columns = {'text'})
