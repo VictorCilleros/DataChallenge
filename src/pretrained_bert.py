@@ -4,10 +4,13 @@ import tensorflow as tf
 import tensorflow_hub as hub
 import tensorflow_text as text
 from official.nlp import optimization  # to create AdamW optimizer
+import tensorflow_models as tfm
 import matplotlib.pyplot as plt
 tf.get_logger().setLevel('ERROR')
 import json
 from transformers import TFCamembertModel
+
+
 
 model = TFCamembertModel.from_pretrained("jplu/tf-camembert-base")
 
