@@ -93,6 +93,6 @@ def French_Preprocess_listofSentence(listofSentence):
         sentence_clean = ' '.join(w for w in words_lemmatize if w.lower() in mots or not w.isalpha())
         preprocess_list.append(sentence_clean)
 
-    df_test = pd.DataFrame(tab,columns = {'text'})
+    df_test = pd.DataFrame(preprocess_list,columns = {'text'})
     df_test.index.rename('id',inplace=True)
     return df_test
