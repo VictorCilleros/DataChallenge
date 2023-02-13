@@ -64,35 +64,33 @@ class CamembertInputProcessor():
     self.french_stopwords = nltk.corpus.stopwords.words('french')
 
   def call(self,inputs,labels):
-    df_pre_proc = French_Preprocess_listofSentence(inputs['Caption'])
+    df_pre_proc = self.French_Preprocess_listofSentence(inputs['Caption'])
     if labels is not None:
         return pd.concat([df_pre_proc,labels],axis=1).drop(columns='Id')
     else:
         return df_pre_proc
 
+    #fonction de preprocessing qui va successivement : 
+    #    enlever la ponctuation
+    #    enlever les chiffres
+    #    transformer les phrases en liste de tokens (en liste de mots)
+    #    enlever les stopwords (mots n’apportant pas de sens)
+    #    lemmatizer
+    #    garder seulement les mots présent dans le dictionnaire
+    #    enlever les majuscules
+    #    reformer les phrases avec les mots restant
 
+    def French_Preprocess_listofSentence(self,listofSentence):
+        preprocess_list = []
+        for sentence in listofSentence :
+            sentence_w_punct = "".join([i.lower() for i in sentence if i not in string.punctuation])
+            sentence_w_num = ''.join(i for i in sentence_w_punct if not i.isdigit())
+            tokenize_sentence = nltk.tokenize.word_tokenize(sentence_w_num)
+            words_w_stopwords = [i for i in tokenize_sentence if i not in self.french_stopwords]
+            words_lemmatize = (self.lemmatizer.lemmatize(w) for w in words_w_stopwords)
+            sentence_clean = ' '.join(w for w in words_lemmatize if w.lower() in self.mots or not w.isalpha())
+            preprocess_list.append(sentence_clean)
 
-#fonction de preprocessing qui va successivement : 
-#    enlever la ponctuation
-#    enlever les chiffres
-#    transformer les phrases en liste de tokens (en liste de mots)
-#    enlever les stopwords (mots n’apportant pas de sens)
-#    lemmatizer
-#    garder seulement les mots présent dans le dictionnaire
-#    enlever les majuscules
-#    reformer les phrases avec les mots restant
-
-def French_Preprocess_listofSentence(listofSentence):
-    preprocess_list = []
-    for sentence in listofSentence :
-        sentence_w_punct = "".join([i.lower() for i in sentence if i not in string.punctuation])
-        sentence_w_num = ''.join(i for i in sentence_w_punct if not i.isdigit())
-        tokenize_sentence = nltk.tokenize.word_tokenize(sentence_w_num)
-        words_w_stopwords = [i for i in tokenize_sentence if i not in self.french_stopwords]
-        words_lemmatize = (self.lemmatizer.lemmatize(w) for w in words_w_stopwords)
-        sentence_clean = ' '.join(w for w in words_lemmatize if w.lower() in self.mots or not w.isalpha())
-        preprocess_list.append(sentence_clean)
-
-    df_test = pd.DataFrame(preprocess_list,columns = {'text'})
-    df_test.index.rename('id',inplace=True)
-    return df_test
+        df_test = pd.DataFrame(preprocess_list,columns = {'text'})
+        df_test.index.rename('id',inplace=True)
+        return df_test
