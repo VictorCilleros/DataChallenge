@@ -1,9 +1,10 @@
+# pip install git+https://github.com/ClaudeCoulombe/FrenchLefffLemmatizer.git &> /dev/null
+
 import os
 
 import matplotlib.pyplot as plt
 import pandas as pd
 import tensorflow as tf
-import tensorflow_models as tfm
 import tensorflow_hub as hub
 import tensorflow_datasets as tfds
 import nltk
@@ -54,8 +55,6 @@ def pre_preocessing_BERT(data:pd.Dataframe,max_seq_lenght:int=128):
     return BertInputProcessor(tokenizer, packer).call(data)
 
 
-
-
 #Path : '../dictionnaire/dictionnaire.txt'
 class CamembertInputProcessor():
   def __init__(self,path:str):
@@ -63,7 +62,7 @@ class CamembertInputProcessor():
     self.lemmatizer = FrenchLefffLemmatizer()
     self.french_stopwords = nltk.corpus.stopwords.words('french')
 
-  def call(self,inputs,labels):
+  def call(self,inputs,labels=None):
     df_pre_proc = self.French_Preprocess_listofSentence(inputs['Caption'])
     if labels is not None:
         return pd.concat([df_pre_proc,labels],axis=1).drop(columns='Id')
