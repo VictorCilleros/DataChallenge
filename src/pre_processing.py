@@ -80,7 +80,7 @@ class CamembertInputProcessor():
     #    enlever les majuscules
     #    reformer les phrases avec les mots restant
 
-    def French_Preprocess_listofSentence(self,listofSentence):
+  def French_Preprocess_listofSentence(self,listofSentence):
         preprocess_list = []
         for sentence in listofSentence :
             sentence_w_punct = "".join([i.lower() for i in sentence if i not in string.punctuation])
